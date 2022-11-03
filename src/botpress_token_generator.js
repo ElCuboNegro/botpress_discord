@@ -23,8 +23,18 @@ export async function botpress_auth() {
             }
         });
         
-        const cred = Promise.resolve(response.data.payload.jwt)
-        return await cred;
+        const cred = await Promise.resolve(response.data.payload.jwt)
+        
+        if(cred) {
+            configService.defaults.headers.common['Authorization'] = `Bearer ${cred}`;
+            return  {
+                status: "ok",
+                message: cred
+            }
+        } 
+        else {
+            throw new Error('Promisse rejected');
+        }
     } 
     catch (error) {
         if (error instanceof Error) {

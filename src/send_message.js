@@ -19,6 +19,25 @@
  *  1.4 la data se envia como = f'{{"text":"{text}"}}'
 
  */
-export function send_chat_message(text) {
-    
+export function send_chat_message(type, text, context, metadata, userID) {
+    const include = 'nlu,state,suggestions,decision'
+    try {
+        let response = await configService(`${configuration.SERVER_URL}/api/v1/bots/${configuration.BOTID}/converse/${userID}/secured?include=${include}`, {
+            method: 'POST',
+            header: {'Content-Type': 'application/json', "Authorization": f"Bearer {token}"}
+        });
+        
+        const cred = Promise.resolve(response.data.payload.jwt)
+        return await cred;
+    } 
+    catch (error) {
+        if (error instanceof Error) {
+            console.log('error message: ', error.message);
+            return error.message;
+          } 
+          else {
+            console.log('unexpected error: ', error);
+            return 'An unexpected error occurred';
+          }
+    }
 }
