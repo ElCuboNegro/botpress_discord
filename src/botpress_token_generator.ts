@@ -15,16 +15,18 @@ const configuration = {
 
 export async function botpress_auth() {
     try {
-        let response = await configService('api/v1/auth/login/basic/default', {
-            method: 'POST',
-            data: {
-                email: configuration.AUTH_EMAIL,
-                password: configuration.AUTH_PASSWORD
-            }
+        let endpoint = await configService('api/v1/auth/login/basic/default', {
+            method: 'POST'
         });
         
-        const cred = await Promise.resolve(response.data.payload.jwt)
-        
+        //let cred = await Promise.resolve(endpoint.data.payload.jwt)
+        let response = await endpoint.request({data: {
+            email: configuration.AUTH_EMAIL,
+            password: configuration.AUTH_PASSWORD
+        }});
+
+        let cred = response.data.payload.jwt
+        console.log(cred)
         if(cred) {
             configService.defaults.headers.common['Authorization'] = `Bearer ${cred}`;
             return  {

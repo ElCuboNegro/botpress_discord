@@ -1,30 +1,31 @@
-
+ import configService from './api/api.js';
  import * as dotenv from 'dotenv';
- import axios from 'axios';
- 
+ import { botpress_auth } from './botpress_token_generator';
  dotenv.config()
 
  const configuration = {
     SERVER_URL: process.env.SERVER_URL,
-    BOT_ID: process.env.BOTID
+    BOTID: process.env.BOTID
   };
 
+  botpress_auth()
 
 /**
- * 1. se tiene que enviar un mensaje al chat_path
- *  1.1  se necesita incluir el nlu, el state, las suggestions, y la decision
- *  1.2  se necesita enviar la informacion al chat_path
- *     1.2.1 f'{serverurl}/api/v1/bots/{BOTID}/converse/{userID}/secured?include={include}'
- *  1.3 los headers deben tener {'Content-Type': 'application/json', "Authorization": f"Bearer {token}"}
- *  1.4 la data se envia como = f'{{"text":"{text}"}}'
-
+  * Sends the messages to the botpress API
+  * @param type {string} 
  */
-export function send_chat_message(type, text, context, metadata, userID) {
+export async function botpress_send_message(type: string, text: string, context: string, metadata:JSON, userID) {
     const include = 'nlu,state,suggestions,decision'
+    let outcomming_data: String = JSON.stringify({
+        "text": text,
+        "type": type,
+        "context": context,
+        "metadata": metadata
+    })
     try {
         let response = await configService(`${configuration.SERVER_URL}/api/v1/bots/${configuration.BOTID}/converse/${userID}/secured?include=${include}`, {
             method: 'POST',
-            header: {'Content-Type': 'application/json', "Authorization": f"Bearer {token}"}
+            data: outcomming_data
         });
         
         const cred = Promise.resolve(response.data.payload.jwt)
