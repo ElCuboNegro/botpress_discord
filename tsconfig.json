@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
       "module": "commonjs",
       "declaration": false,
       "noImplicitAny": false,
@@ -8,11 +8,12 @@
       "noLib": false,
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "target": "es6",
+      "target": "es2022",
       "sourceMap": true,
       "allowJs": true,
-      "outDir": "./dist"
+      "outDir": "./dist",
+      "rootDir": "src"
     },
-    "include": ["src//*"],
-    "exclude": ["node_modules", "/*.spec.ts"]
-  }
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

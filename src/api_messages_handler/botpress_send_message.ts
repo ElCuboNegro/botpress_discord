@@ -1,4 +1,4 @@
- import configService from './api/api.js';
+ import configService from '../api_messages_handler/botpress_api';
  import * as dotenv from 'dotenv';
  import { botpress_auth } from './botpress_token_generator';
  dotenv.config()
@@ -11,8 +11,12 @@
   botpress_auth()
 
 /**
-  * Sends the messages to the botpress API
-  * @param type {string} 
+ * Sends the messages to the botpress API
+ * @param type {string}
+ * @param text
+ * @param context
+ * @param metadata
+ * @param userID
  */
 export async function botpress_send_message(type: string, text: string, context: string, metadata:JSON, userID) {
     const include = 'nlu,state,suggestions,decision'

@@ -1,4 +1,4 @@
-import configService from './api/api.js';
+import configService from './botpress_api';
 
 
 const configuration = {
@@ -27,16 +27,14 @@ export async function botpress_auth() {
 
         let cred = response.data.payload.jwt
         console.log(cred)
-        if(cred) {
+        if (cred) {
             configService.defaults.headers.common['Authorization'] = `Bearer ${cred}`;
-            return  {
+            return {
                 status: "ok",
                 message: cred
             }
-        } 
-        else {
-            throw new Error('Promisse rejected');
         }
+        throw new Error('Promisse rejected');
     } 
     catch (error) {
         if (error instanceof Error) {
